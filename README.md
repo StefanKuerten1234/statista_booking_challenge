@@ -1,6 +1,6 @@
 **Prerequisites**
 
-- JDK 8
+- JDK 17
 - IntelliJ (recommended) or your favorite Java IDE
 - Bash environment with installed 'curl' or Postman
 
