@@ -48,7 +48,7 @@ Basically something you wouldn't be too embarrassed to push to production.
 
 Sample Body:
 ```
-{"description": "Cool description!", "price": 50.00, "currency": USD, "subscription_start_date": 683124845000, "email": "valid@email.ok", "department": "cool department"}
+{"description": "Cool description!", "price": 50.00, "currency": "USD", "subscription_start_date": 683124845000, "email": "valid@email.ok", "department": "cool department"}
 ```
 
 Creates a new booking and sends an e-mail with the details.
@@ -57,7 +57,7 @@ Creates a new booking and sends an e-mail with the details.
 
 Sample Body:
 ```
-{"description": "Cool description!", "price": 50.00, "currency": USD, "subscription_start_date": 683124845000, "email": "valid@email.ok", "department": "another_department" }
+{"description": "Cool description!", "price": 50.00, "currency": "USD", "subscription_start_date": 683124845000, "email": "valid@email.ok", "department": "another_department" }
 ```
 
 Insert, replace if already exists a booking.

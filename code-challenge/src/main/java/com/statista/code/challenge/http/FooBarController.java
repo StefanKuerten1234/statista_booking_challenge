@@ -1,4 +1,4 @@
-package com.statista.code.challenge;
+package com.statista.code.challenge.http;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
