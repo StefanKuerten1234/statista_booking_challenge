@@ -8,9 +8,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookingController.class)
@@ -24,7 +25,7 @@ class BookingControllerIntegrationTest {
 
     @Test
     void shouldPOST() throws Exception {
-        when(bookingService.create(any(Booking.class))).thenReturn(Booking.builder().build());
+        when(bookingService.create(any(Booking.class))).thenReturn(Booking.builder().booking_id("findMe").build());
 
         // Given a JSON representation of a booking
         String booking = """
@@ -41,7 +42,13 @@ class BookingControllerIntegrationTest {
         // When I POST it to /bookingservice/booking
         mockMvc.perform(post("/bookingservice/booking").content(booking))
 
-        // Then the response is CREATED
-                .andExpect(status().isCreated());
+                // Then the response is CREATED
+                .andExpect(status().isCreated())
+
+                // And then the response contains a location header
+                .andExpect(header().string("location", equalTo("/bookingservice/booking/findMe")));
+
+        // And then the createBoooking usecase is executed
+        verify(bookingService).create(any());
     }
 }
