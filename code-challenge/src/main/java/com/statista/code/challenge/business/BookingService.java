@@ -18,4 +18,8 @@ public class BookingService {
         notificationService.send(savedBooking);
         return savedBooking;
     }
+
+    public Booking search(String booking_id) {
+        return bookingRepository.findById(booking_id);  // TODO: Handle null case
+    }
 }

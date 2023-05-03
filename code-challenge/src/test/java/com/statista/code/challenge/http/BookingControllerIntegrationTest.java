@@ -6,13 +6,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.Currency;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BookingController.class)
 class BookingControllerIntegrationTest {
@@ -40,7 +45,9 @@ class BookingControllerIntegrationTest {
                 """;
 
         // When I POST it to /bookingservice/booking
-        mockMvc.perform(post("/bookingservice/booking").content(booking))
+        mockMvc.perform(post("/bookingservice/booking")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(booking))
 
                 // Then the response is CREATED
                 .andExpect(status().isCreated())
@@ -50,5 +57,29 @@ class BookingControllerIntegrationTest {
 
         // And then the createBoooking usecase is executed
         verify(bookingService).create(any());
+    }
+
+    @Test
+    void shouldGET() throws Exception {
+        // Given a stored Booking with id x
+        when(bookingService.search("x")).thenReturn(Booking.builder()
+                .booking_id("x")
+                .description("masterplan")
+                .price(BigDecimal.valueOf(9.99))
+                .currency(Currency.getInstance("EUR"))
+                .email("'tis but a string")
+                .subscription_start_date(Instant.now())
+                .department("ministry of silly walks")
+                .build());
+
+        // When I GET from /bookingservice/booking/x
+        mockMvc.perform(
+                        get("/bookingservice/booking/x"))
+
+                // Then the response is OK
+                .andExpect(status().isOk())
+
+                // And then the response contains a JSON representation of the booking
+                .andExpect(jsonPath("$.email").value("'tis but a string"));
     }
 }

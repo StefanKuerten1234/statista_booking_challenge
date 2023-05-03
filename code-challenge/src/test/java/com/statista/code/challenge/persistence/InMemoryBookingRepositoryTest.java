@@ -19,7 +19,7 @@ class InMemoryBookingRepositoryTest {
         Booking booking = new Booking(
                 null,
                 "Cool description!",
-                new BigDecimal(50).setScale(2, RoundingMode.HALF_UP),
+                BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP),
                 Currency.getInstance("USD"),
                 Instant.ofEpochSecond(683124845000L),
                 "valid@email.ok",
@@ -31,5 +31,29 @@ class InMemoryBookingRepositoryTest {
         // Then the result is the same Booking with new Id assigned
         assertThat(actual.booking_id()).isNotEmpty();
         assertThat(actual).usingRecursiveComparison().ignoringFields("booking_id").isEqualTo(booking);
+    }
+
+    @Test
+    void shouldRetrieveSavedBooking() {
+        InMemoryBookingRepository inMemoryBookingRepository = new InMemoryBookingRepository();
+
+        // Given a Booking
+        Booking booking = Booking.builder()
+                .description("Cool description!")
+                .price(BigDecimal.valueOf(50).setScale(2, RoundingMode.HALF_UP))
+                .currency(Currency.getInstance("USD"))
+                .subscription_start_date(Instant.ofEpochSecond(683124845000L))
+                .email("valid@email.ok")
+                .department("cool department")
+                .build();
+
+        // When I save it
+        Booking saved = inMemoryBookingRepository.save(booking);
+
+        // And then I retrieve it
+        Booking found = inMemoryBookingRepository.findById(saved.booking_id());
+
+        // Then the result is the same Booking
+        assertThat(found).isEqualTo(saved);
     }
 }

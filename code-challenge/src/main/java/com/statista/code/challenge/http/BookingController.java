@@ -4,10 +4,7 @@ import com.statista.code.challenge.business.Booking;
 import com.statista.code.challenge.business.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -21,20 +18,20 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/booking")
+    @PostMapping(value = "/booking")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Booking> createBooking(Booking booking) {
+    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
         return ResponseEntity.created(URI.create("/bookingservice/booking/" + bookingService.create(booking).booking_id())).build();
-
     }
-//    @PutMapping("/booking/{transactionId}")
+
+    //    @PutMapping("/booking/{transactionId}")
 //    public ResponseEntity updateBooking() {
 //        return ResponseEntity.ok().build();
 //    }
-//    @GetMapping("/booking/{bookingId}")
-//    public ResponseEntity getBookingById() {
-//        return ResponseEntity.ok().build();
-//    }
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<Booking> getBookingById(@PathVariable String bookingId) {
+        return ResponseEntity.ok(bookingService.search(bookingId));
+    }
 //    @GetMapping("/booking/type/{type}")
 //    public ResponseEntity getBookingsOfType() {
 //        return ResponseEntity.ok().build();

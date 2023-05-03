@@ -46,4 +46,21 @@ class BookingServiceTest {
         // And then a notification is sent
         verify(notificationService).send(createdBooking);
     }
+
+    @Test
+    void shouldSearch() {
+        BookingRepository bookingRepository = mock(BookingRepository.class);
+        BookingService bookingService = new BookingService(bookingRepository, ignored -> {
+        });
+        // Given a saved Booking
+        when(bookingRepository.findById("y")).thenReturn(Booking.builder()
+                .booking_id("y")
+                .build());
+
+        // When I search for it
+        Booking actual = bookingService.search("y");
+
+        // Then it is found
+        assertThat(actual.booking_id()).isEqualTo("y");
+    }
 }

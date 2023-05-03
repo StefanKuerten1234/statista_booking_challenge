@@ -1,6 +1,5 @@
-package com.statista.code.challenge.http;
+package com.statista.code.challenge.business;
 
-import com.statista.code.challenge.business.Booking;
 import com.statista.code.challenge.config.ObjectMapperConfig;
 import org.junit.jupiter.api.Test;
 
