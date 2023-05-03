@@ -1,7 +1,7 @@
 package com.statista.code.challenge.notification;
 
+import com.statista.code.challenge.business.Booking;
 import com.statista.code.challenge.business.NotificationService;
-import com.statista.code.challenge.http.Booking;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

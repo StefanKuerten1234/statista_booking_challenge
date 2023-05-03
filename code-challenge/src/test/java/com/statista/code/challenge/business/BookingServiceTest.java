@@ -1,6 +1,5 @@
 package com.statista.code.challenge.business;
 
-import com.statista.code.challenge.http.Booking;
 import com.statista.code.challenge.persistence.BookingRepository;
 import org.junit.jupiter.api.Test;
 

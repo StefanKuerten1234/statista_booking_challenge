@@ -1,4 +1,4 @@
-package com.statista.code.challenge.http;
+package com.statista.code.challenge.business;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;

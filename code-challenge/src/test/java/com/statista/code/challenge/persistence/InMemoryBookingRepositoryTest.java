@@ -1,6 +1,6 @@
 package com.statista.code.challenge.persistence;
 
-import com.statista.code.challenge.http.Booking;
+import com.statista.code.challenge.business.Booking;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

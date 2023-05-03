@@ -1,5 +1,6 @@
 package com.statista.code.challenge.http;
 
+import com.statista.code.challenge.business.Booking;
 import com.statista.code.challenge.business.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
