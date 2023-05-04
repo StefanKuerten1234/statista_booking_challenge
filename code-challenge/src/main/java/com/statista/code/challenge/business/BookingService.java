@@ -22,4 +22,16 @@ public class BookingService {
     public Booking search(String booking_id) {
         return bookingRepository.findById(booking_id);  // TODO: Handle null case
     }
+
+    public Booking update(String booking_id, Booking booking) {
+        return bookingRepository.save(
+                new Booking(
+                        booking_id,
+                        booking.description(),
+                        booking.price(),
+                        booking.currency(),
+                        booking.subscription_start_date(),
+                        booking.email(),
+                        booking.department()));
+    }
 }

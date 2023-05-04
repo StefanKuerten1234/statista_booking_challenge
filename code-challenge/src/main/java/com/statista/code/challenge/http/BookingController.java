@@ -2,7 +2,6 @@ package com.statista.code.challenge.http;
 
 import com.statista.code.challenge.business.Booking;
 import com.statista.code.challenge.business.BookingService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,16 +17,17 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping(value = "/booking")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/booking")
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
         return ResponseEntity.created(URI.create("/bookingservice/booking/" + bookingService.create(booking).booking_id())).build();
     }
 
-    //    @PutMapping("/booking/{transactionId}")
-//    public ResponseEntity updateBooking() {
-//        return ResponseEntity.ok().build();
-//    }
+    @PutMapping("/booking/{bookingId}")
+    public ResponseEntity<Void> updateBooking(@RequestBody Booking booking, @PathVariable String bookingId) {
+        bookingService.update(bookingId, booking);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/booking/{bookingId}")
     public ResponseEntity<Booking> getBookingById(@PathVariable String bookingId) {
         return ResponseEntity.ok(bookingService.search(bookingId));

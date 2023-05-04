@@ -48,6 +48,41 @@ class BookingServiceTest {
     }
 
     @Test
+    void shouldUpdate() {
+        NotificationService notificationService = mock(NotificationService.class);
+        BookingRepository bookingRepository = mock(BookingRepository.class);
+        Booking expected = Booking.builder()
+                .booking_id("1")
+                .description("updated masterplan")
+                .price(BigDecimal.valueOf(99999.99))
+                .currency(Currency.getInstance("EUR"))
+                .email("'tis but a string")
+                .subscription_start_date(Instant.ofEpochSecond(1))
+                .department("ministry of silly walks")
+                .build();
+        when(bookingRepository.save(expected)).thenReturn(
+                expected);
+        BookingService bookingService = new BookingService(bookingRepository, notificationService);
+
+        // Given the data for a Booking
+        String booking_id = "1" ;
+        Booking bookingInput = Booking.builder()
+                .description("updated masterplan")
+                .price(BigDecimal.valueOf(99999.99))
+                .currency(Currency.getInstance("EUR"))
+                .email("'tis but a string")
+                .subscription_start_date(Instant.ofEpochSecond(1))
+                .department("ministry of silly walks")
+                .build();
+
+        // When I update it
+        Booking updatedBooking = bookingService.update(booking_id, bookingInput);
+
+        // Then the booking is saved
+        assertThat(updatedBooking).isEqualTo(expected);
+    }
+
+    @Test
     void shouldSearch() {
         BookingRepository bookingRepository = mock(BookingRepository.class);
         BookingService bookingService = new BookingService(bookingRepository, ignored -> {

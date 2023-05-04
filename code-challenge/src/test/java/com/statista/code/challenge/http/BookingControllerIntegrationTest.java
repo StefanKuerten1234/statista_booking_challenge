@@ -15,8 +15,7 @@ import java.util.Currency;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BookingController.class)
@@ -57,6 +56,34 @@ class BookingControllerIntegrationTest {
 
         // And then the createBoooking usecase is executed
         verify(bookingService).create(any());
+    }
+
+    @Test
+    void shouldPUT() throws Exception {
+        when(bookingService.update(anyString(), any(Booking.class))).thenReturn(Booking.builder().booking_id("someId").build());
+
+        // Given a JSON representation of a booking
+        String booking = """
+                {
+                  "description": "Cool description!",
+                  "price": 50.00,
+                  "currency": "USD",
+                  "subscription_start_date": 683124845000,
+                  "email": "valid@email.ok",
+                  "department": "cool department"
+                }
+                """;
+
+        // When I PUT it to /bookingservice/booking/someId
+        mockMvc.perform(put("/bookingservice/booking/someId")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(booking))
+
+                // Then the response is CREATED
+                .andExpect(status().isOk());
+
+        // And then the updateBoooking usecase is executed
+        verify(bookingService).update(anyString(), any());
     }
 
     @Test

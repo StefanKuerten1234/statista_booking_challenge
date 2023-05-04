@@ -34,6 +34,20 @@ class InMemoryBookingRepositoryTest {
     }
 
     @Test
+    void shouldPreserveId() {
+        InMemoryBookingRepository inMemoryBookingRepository = new InMemoryBookingRepository();
+        // Given a Booking with Id
+        Booking booking = Booking.builder().booking_id("already assigned").build();
+
+        // When I save it
+        Booking actual = inMemoryBookingRepository.save(booking);
+
+        // Then the result has the same Id
+        assertThat(actual.booking_id()).isEqualTo(booking.booking_id());
+
+    }
+
+    @Test
     void shouldRetrieveSavedBooking() {
         InMemoryBookingRepository inMemoryBookingRepository = new InMemoryBookingRepository();
 

@@ -3,6 +3,7 @@ package com.statista.code.challenge.persistence;
 import com.statista.code.challenge.business.Booking;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -13,16 +14,15 @@ public class InMemoryBookingRepository implements BookingRepository {
 
     @Override
     public Booking save(Booking booking) {
-        String bookingId = UUID.randomUUID().toString();
         Booking createdBooking = new Booking(
-                bookingId,
+                Optional.ofNullable(booking.booking_id()).orElse(UUID.randomUUID().toString()),
                 booking.description(),
                 booking.price(),
                 booking.currency(),
                 booking.subscription_start_date(),
                 booking.email(),
                 booking.department());
-        bookings.put(bookingId, createdBooking);
+        bookings.put(createdBooking.booking_id(), createdBooking);
         return createdBooking;
     }
 

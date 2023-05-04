@@ -15,8 +15,8 @@ public class UsecaseIntegrationTest {
     WebTestClient webTestClient;
 
     @Test
-    void shouldCreateAndFindBooking() {
-        String bookingJson = """
+    void shouldCreateUpdateAndFindBooking() {
+        String initialJson = """
                 {
                   "description": "Cool description!",
                   "price": 50.00,
@@ -30,7 +30,7 @@ public class UsecaseIntegrationTest {
         String location = webTestClient.post()
                 .uri("/bookingservice/booking")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(bookingJson)
+                .bodyValue(initialJson)
                 .exchange()
                 .expectHeader()
                 .value("location", locationHeader -> assertThat(locationHeader).startsWith("/bookingservice/booking/"))
@@ -43,6 +43,31 @@ public class UsecaseIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)
-                .value(json -> assertThat(json).isEqualToIgnoringWhitespace(bookingJson));
+                .value(json -> assertThat(json).isEqualToIgnoringWhitespace(initialJson));
+
+        String modifiedJson = """
+                {
+                  "description": "Another Cool description!",
+                  "price": 51.00,
+                  "currency": "INR",
+                  "subscription_start_date": 683124845001,
+                  "email": "alsovalid@email.ok",
+                  "department": "very cool department"
+                }
+                """;
+
+        webTestClient.put()
+                .uri(location)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(modifiedJson)
+                .exchange()
+                .expectStatus().isOk();
+
+        webTestClient.get()
+                .uri(location)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(json -> assertThat(json).isEqualToIgnoringWhitespace(modifiedJson));
     }
 }
