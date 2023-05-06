@@ -28,12 +28,12 @@ public class UsecaseIntegrationTest {
                 """;
 
         String location = webTestClient.post()
-                .uri("/bookingservice/booking")
+                .uri("/bookingservice/bookings")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(initialJson)
                 .exchange()
                 .expectHeader()
-                .value("location", locationHeader -> assertThat(locationHeader).startsWith("/bookingservice/booking/"))
+                .value("location", locationHeader -> assertThat(locationHeader).startsWith("/bookingservice/bookings/"))
                 .returnResult(String.class)
                 .getResponseHeaders()
                 .getFirst("location");
@@ -73,7 +73,7 @@ public class UsecaseIntegrationTest {
         String listFromModifiedJson = "[" + modifiedJson + "]" ;
 
         webTestClient.get()
-                .uri("/bookingservice/booking/department/very cool department")
+                .uri("/bookingservice/bookings/department/very cool department")
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class)

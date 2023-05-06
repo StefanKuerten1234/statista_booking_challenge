@@ -44,8 +44,8 @@ class BookingControllerIntegrationTest {
                 }
                 """;
 
-        // When I POST it to /bookingservice/booking
-        mockMvc.perform(post("/bookingservice/booking")
+        // When I POST it to /bookingservice/bookings
+        mockMvc.perform(post("/bookingservice/bookings")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(booking))
 
@@ -53,7 +53,7 @@ class BookingControllerIntegrationTest {
                 .andExpect(status().isCreated())
 
                 // And then the response contains a location header
-                .andExpect(header().string("location", equalTo("/bookingservice/booking/findMe")));
+                .andExpect(header().string("location", equalTo("/bookingservice/bookings/findMe")));
 
         // And then the createBoooking usecase is executed
         verify(bookingService).create(any());
@@ -75,8 +75,8 @@ class BookingControllerIntegrationTest {
                 }
                 """;
 
-        // When I PUT it to /bookingservice/booking/someId
-        mockMvc.perform(put("/bookingservice/booking/someId")
+        // When I PUT it to /bookingservice/bookings/someId
+        mockMvc.perform(put("/bookingservice/bookings/someId")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(booking))
 
@@ -100,9 +100,9 @@ class BookingControllerIntegrationTest {
                 .department("ministry of silly walks")
                 .build());
 
-        // When I GET from /bookingservice/booking/x
+        // When I GET from /bookingservice/bookings/x
         mockMvc.perform(
-                        get("/bookingservice/booking/x"))
+                        get("/bookingservice/bookings/x"))
 
                 // Then the response is OK
                 .andExpect(status().isOk())
@@ -120,9 +120,9 @@ class BookingControllerIntegrationTest {
                 .department("y")
                 .build()));
 
-        // When I GET from /bookingservice/booking/department/y
+        // When I GET from /bookingservice/bookings/department/y
         mockMvc.perform(
-                        get("/bookingservice/booking/department/y"))
+                        get("/bookingservice/bookings/department/y"))
 
                 // Then the response is OK
                 .andExpect(status().isOk())

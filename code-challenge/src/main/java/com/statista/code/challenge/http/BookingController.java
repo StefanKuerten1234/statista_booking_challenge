@@ -18,23 +18,23 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/booking")
+    @PostMapping("/bookings")
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
-        return ResponseEntity.created(URI.create("/bookingservice/booking/" + bookingService.create(booking).booking_id())).build();
+        return ResponseEntity.created(URI.create("/bookingservice/bookings/" + bookingService.create(booking).booking_id())).build();
     }
 
-    @PutMapping("/booking/{bookingId}")
+    @PutMapping("/bookings/{bookingId}")
     public ResponseEntity<Void> updateBooking(@RequestBody Booking booking, @PathVariable String bookingId) {
         bookingService.update(bookingId, booking);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/booking/{bookingId}")
+    @GetMapping("/bookings/{bookingId}")
     public ResponseEntity<Booking> getBookingById(@PathVariable String bookingId) {
         return ResponseEntity.ok(bookingService.search(bookingId));
     }
 
-    @GetMapping("/booking/department/{department}")
+    @GetMapping("/bookings/department/{department}")
     public ResponseEntity<List<Booking>> getBookingByDepartment(@PathVariable String department) {
         return ResponseEntity.ok(bookingService.searchByDepartment(department));
     }

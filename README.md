@@ -44,7 +44,7 @@ Basically something you wouldn't be too embarrassed to push to production.
 
 **API Specification:**
 
-**POST /bookingservice/bookings**
+**POST /bookingsservice/bookings**
 
 Sample Body:
 ```
