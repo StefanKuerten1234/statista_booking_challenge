@@ -3,6 +3,7 @@ package com.statista.code.challenge.persistence;
 import com.statista.code.challenge.business.Booking;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,5 +30,10 @@ public class InMemoryBookingRepository implements BookingRepository {
     @Override
     public Booking findById(String booking_id) {
         return bookings.get(booking_id);
+    }
+
+    @Override
+    public List<Booking> findAll() {
+        return bookings.values().stream().toList();
     }
 }

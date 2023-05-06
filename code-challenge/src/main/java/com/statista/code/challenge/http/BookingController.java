@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/bookingservice")
@@ -32,8 +33,10 @@ public class BookingController {
     public ResponseEntity<Booking> getBookingById(@PathVariable String bookingId) {
         return ResponseEntity.ok(bookingService.search(bookingId));
     }
-//    @GetMapping("/booking/type/{type}")
-//    public ResponseEntity getBookingsOfType() {
-//        return ResponseEntity.ok().build();
-//    }
+
+    @GetMapping("/booking/department/{department}")
+    public ResponseEntity<List<Booking>> getBookingByDepartment(@PathVariable String department) {
+        return ResponseEntity.ok(bookingService.searchByDepartment(department));
+    }
+
 }

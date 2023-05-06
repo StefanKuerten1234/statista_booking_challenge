@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Currency;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -97,5 +98,26 @@ class BookingServiceTest {
 
         // Then it is found
         assertThat(actual.booking_id()).isEqualTo("y");
+    }
+
+    @Test
+    void shouldSearchByDepartment() {
+        BookingRepository bookingRepository = mock(BookingRepository.class);
+        BookingService bookingService = new BookingService(bookingRepository, ignored -> {
+        });
+        // Given 2 saved Bookings with department a and 1 with department b
+        when(bookingRepository.findAll()).thenReturn(List.of(
+                Booking.builder().booking_id("first A").department("a").build(),
+                Booking.builder().booking_id("second A").department("a").build(),
+                Booking.builder().booking_id("first B").department("b").build()
+        ));
+
+        // When I search for all Bookings with Department a
+        List<Booking> actual = bookingService.searchByDepartment("a");
+
+        // Then the result contains exactly the 2 departments with Department a
+        assertThat(actual).containsExactlyInAnyOrder(
+                Booking.builder().booking_id("first A").department("a").build(),
+                Booking.builder().booking_id("second A").department("a").build());
     }
 }

@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.Currency;
+import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -69,5 +71,22 @@ class InMemoryBookingRepositoryTest {
 
         // Then the result is the same Booking
         assertThat(found).isEqualTo(saved);
+    }
+
+    @Test
+    void shouldRetrieveAll() {
+        InMemoryBookingRepository inMemoryBookingRepository = new InMemoryBookingRepository();
+
+        // Given three saved Bookings
+        IntStream.rangeClosed(1, 3)
+                .mapToObj(String::valueOf)
+                .map(id -> Booking.builder().booking_id(id).build())
+                .forEach(inMemoryBookingRepository::save);
+
+        // When I search for all
+        List<Booking> actual = inMemoryBookingRepository.findAll();
+
+        // Then the result contains both
+        assertThat(actual.stream().map(Booking::booking_id)).containsExactlyInAnyOrder("1", "2", "3");
     }
 }

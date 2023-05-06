@@ -69,5 +69,14 @@ public class UsecaseIntegrationTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(json -> assertThat(json).isEqualToIgnoringWhitespace(modifiedJson));
+
+        String listFromModifiedJson = "[" + modifiedJson + "]" ;
+
+        webTestClient.get()
+                .uri("/bookingservice/booking/department/very cool department")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(json -> assertThat(json).isEqualToIgnoringWhitespace(listFromModifiedJson));
     }
 }

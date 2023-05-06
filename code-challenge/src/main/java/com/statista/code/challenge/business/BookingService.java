@@ -3,6 +3,9 @@ package com.statista.code.challenge.business;
 import com.statista.code.challenge.persistence.BookingRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
@@ -33,5 +36,11 @@ public class BookingService {
                         booking.subscription_start_date(),
                         booking.email(),
                         booking.department()));
+    }
+
+    public List<Booking> searchByDepartment(String department) {
+        return bookingRepository.findAll().stream()
+                .filter(booking -> booking.department().equals(department))
+                .collect(Collectors.toList());
     }
 }

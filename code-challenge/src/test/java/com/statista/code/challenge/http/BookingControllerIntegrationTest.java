@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Currency;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -108,5 +109,25 @@ class BookingControllerIntegrationTest {
 
                 // And then the response contains a JSON representation of the booking
                 .andExpect(jsonPath("$.email").value("'tis but a string"));
+    }
+
+    @Test
+    void shouldGETbyDepartment() throws Exception {
+        // Given a stored Booking with department y
+        when(bookingService.searchByDepartment("y")).thenReturn(singletonList(Booking.builder()
+                .booking_id("x")
+                .email("nomail@statista.com")
+                .department("y")
+                .build()));
+
+        // When I GET from /bookingservice/booking/department/y
+        mockMvc.perform(
+                        get("/bookingservice/booking/department/y"))
+
+                // Then the response is OK
+                .andExpect(status().isOk())
+
+                // And then the response contains a JSON representation of the booking
+                .andExpect(jsonPath("$[*].department").value("y"));
     }
 }
