@@ -13,9 +13,12 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final NotificationService notificationService;
 
-    public BookingService(BookingRepository bookingRepository, NotificationService notificationService) {
+    private final BusinessRegistry businessRegistry;
+
+    public BookingService(BookingRepository bookingRepository, NotificationService notificationService, BusinessRegistry businessRegistry) {
         this.bookingRepository = bookingRepository;
         this.notificationService = notificationService;
+        this.businessRegistry = businessRegistry;
     }
 
     public Booking create(Booking booking) {
@@ -58,5 +61,10 @@ public class BookingService {
                 .filter(booking -> booking.currency().equals(Currency.getInstance(currency)))
                 .map(Booking::price)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String doBusiness(String booking_id) {
+        Booking booking = bookingRepository.findById(booking_id);
+        return businessRegistry.getDepartment(booking.department()).doBusiness(booking);
     }
 }

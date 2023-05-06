@@ -50,4 +50,9 @@ public class BookingController {
     public ResponseEntity<BigDecimal> getSumForCurrency(@PathVariable String currency) {
         return ResponseEntity.ok(bookingService.sumForCurrency(currency));
     }
+
+    @GetMapping("/bookings/dobusiness/{booking_id}")
+    public ResponseEntity<String> getBusinessResult(@PathVariable String booking_id) {
+        return ResponseEntity.ok(bookingService.doBusiness(booking_id));
+    }
 }

@@ -27,7 +27,7 @@ class BookingServiceTest {
                         .subscription_start_date(Instant.now())
                         .department("ministry of silly walks")
                         .build());
-        BookingService bookingService = new BookingService(bookingRepository, notificationService);
+        BookingService bookingService = new BookingService(bookingRepository, notificationService, mock(BusinessRegistry.class));
         // Given the data for a Booking
         Booking booking = Booking.builder()
                 .description("masterplan")
@@ -63,7 +63,7 @@ class BookingServiceTest {
                 .build();
         when(bookingRepository.save(expected)).thenReturn(
                 expected);
-        BookingService bookingService = new BookingService(bookingRepository, notificationService);
+        BookingService bookingService = new BookingService(bookingRepository, notificationService, mock(BusinessRegistry.class));
 
         // Given the data for a Booking
         String booking_id = "1" ;
@@ -87,7 +87,7 @@ class BookingServiceTest {
     void shouldSearch() {
         BookingRepository bookingRepository = mock(BookingRepository.class);
         BookingService bookingService = new BookingService(bookingRepository, ignored -> {
-        });
+        }, mock(BusinessRegistry.class));
         // Given a saved Booking
         when(bookingRepository.findById("y")).thenReturn(Booking.builder()
                 .booking_id("y")
@@ -104,7 +104,7 @@ class BookingServiceTest {
     void shouldSearchByDepartment() {
         BookingRepository bookingRepository = mock(BookingRepository.class);
         BookingService bookingService = new BookingService(bookingRepository, ignored -> {
-        });
+        }, mock(BusinessRegistry.class));
         // Given 2 saved Bookings with department a and 1 with department b
         when(bookingRepository.findAll()).thenReturn(List.of(
                 Booking.builder().booking_id("first A").department("a").build(),
@@ -125,7 +125,7 @@ class BookingServiceTest {
     void shouldSearchCurrencies() {
         BookingRepository bookingRepository = mock(BookingRepository.class);
         BookingService bookingService = new BookingService(bookingRepository, ignored -> {
-        });
+        }, mock(BusinessRegistry.class));
         // Given saved Bookings with currency EUR and USD
         when(bookingRepository.findAll()).thenReturn(List.of(
                 Booking.builder().booking_id("first EUR").currency(Currency.getInstance("EUR")).build(),
@@ -144,7 +144,7 @@ class BookingServiceTest {
     void shouldSumCurrency() {
         BookingRepository bookingRepository = mock(BookingRepository.class);
         BookingService bookingService = new BookingService(bookingRepository, ignored -> {
-        });
+        }, mock(BusinessRegistry.class));
 
         // Given saved Bookings with currency EUR and USD
         when(bookingRepository.findAll()).thenReturn(List.of(
@@ -161,5 +161,31 @@ class BookingServiceTest {
 
         // Then the result is the sum of those Bookings
         assertThat(actual).isEqualTo(BigDecimal.valueOf(19.98));
+    }
+
+    @Test
+    void shouldDoBusinessForSales() {
+        BookingRepository bookingRepository = mock(BookingRepository.class);
+        BusinessRegistry businessRegistry = mock(BusinessRegistry.class);
+        BookingService bookingService = new BookingService(bookingRepository, ignored -> {
+        }, businessRegistry);
+
+        // Given a Booking with Department "Sales"
+        when(businessRegistry.getDepartment("Sales")).thenReturn(booking -> "Take a voucher");
+        when(bookingRepository.findById("1")).thenReturn(Booking.builder()
+                .booking_id("1")
+                .description("updated masterplan")
+                .price(BigDecimal.valueOf(4.95))
+                .currency(Currency.getInstance("EUR"))
+                .email("loyal@customer.com")
+                .subscription_start_date(Instant.ofEpochSecond(1))
+                .department("Sales")
+                .build());
+
+        // When I execute the business logic for this booking
+        String actual = bookingService.doBusiness("1");
+
+        // Then the result is a voucher for the next booking of
+        assertThat(actual).isEqualTo("Take a voucher");
     }
 }

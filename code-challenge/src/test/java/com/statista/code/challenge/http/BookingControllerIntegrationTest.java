@@ -163,4 +163,21 @@ class BookingControllerIntegrationTest {
                 // And the result is 23.98
                 .andExpect(content().string("23.98"));
     }
+
+    @Test
+    void shouldDoBusiness() throws Exception {
+        // Given a stored Booking with department z and booking_id x
+        // And given department z has a business rule that returns "Yeah!"
+        when(bookingService.doBusiness("x")).thenReturn("Yeah!");
+
+        // When I GET from /bookingservice/bookings/dobusiness/x
+        mockMvc.perform(
+                        get("/bookingservice/bookings/dobusiness/x"))
+
+                // Then the response is OK
+                .andExpect(status().isOk())
+
+                // And the result is "Yeah!"
+                .andExpect(content().string("Yeah!"));
+    }
 }
