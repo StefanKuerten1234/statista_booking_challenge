@@ -139,4 +139,27 @@ class BookingServiceTest {
         // Then the result contains exactly the 2 currencies
         assertThat(actual).containsExactlyInAnyOrder(Currency.getInstance("EUR"), Currency.getInstance("USD"));
     }
+
+    @Test
+    void shouldSumCurrency() {
+        BookingRepository bookingRepository = mock(BookingRepository.class);
+        BookingService bookingService = new BookingService(bookingRepository, ignored -> {
+        });
+
+        // Given saved Bookings with currency EUR and USD
+        when(bookingRepository.findAll()).thenReturn(List.of(
+                Booking.builder().booking_id("first EUR")
+                        .price(BigDecimal.valueOf(9.99)).currency(Currency.getInstance("EUR")).build(),
+                Booking.builder().booking_id("second EUR")
+                        .price(BigDecimal.valueOf(9.99)).currency(Currency.getInstance("EUR")).build(),
+                Booking.builder().booking_id("first USD")
+                        .price(BigDecimal.valueOf(29.99)).currency(Currency.getInstance("USD")).build()
+        ));
+
+        // When I ask sum the price of all EUR Bookings
+        BigDecimal actual = bookingService.sumForCurrency(("EUR"));
+
+        // Then the result is the sum of those Bookings
+        assertThat(actual).isEqualTo(BigDecimal.valueOf(19.98));
+    }
 }

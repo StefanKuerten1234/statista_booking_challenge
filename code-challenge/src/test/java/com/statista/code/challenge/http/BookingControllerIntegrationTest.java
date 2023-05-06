@@ -144,7 +144,23 @@ class BookingControllerIntegrationTest {
                 // Then the response is OK
                 .andExpect(status().isOk())
 
-                // Then the result is a list containing the currency EUR
+                // And the result is a list containing the currency EUR
                 .andExpect(jsonPath("$[0]").value("EUR"));
+    }
+
+    @Test
+    void shouldGETCurrencySum() throws Exception {
+        // Given stored Bookings with currency EUR and a sum of 23.98
+        when(bookingService.sumForCurrency("EUR")).thenReturn(BigDecimal.valueOf(23.98));
+
+        // When I GET from /bookingservice/bookings/sum/EUR
+        mockMvc.perform(
+                        get("/bookingservice/sum/EUR"))
+
+                // Then the response is OK
+                .andExpect(status().isOk())
+
+                // And the result is 23.98
+                .andExpect(content().string("23.98"));
     }
 }

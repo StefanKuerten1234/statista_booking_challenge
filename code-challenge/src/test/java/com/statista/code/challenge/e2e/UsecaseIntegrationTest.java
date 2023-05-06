@@ -105,5 +105,17 @@ public class UsecaseIntegrationTest {
                     assertThat(json).contains("EUR");
                     assertThat(json).contains("INR");
                 });
+
+        webTestClient.post()
+                .uri("/bookingservice/bookings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(initialJsonWithEUR)
+                .exchange();
+
+        webTestClient.get()
+                .uri("bookingservice/sum/EUR")
+                .exchange()
+                .expectBody(String.class)
+                .value(sum -> assertThat(sum).isEqualTo("100.00"));
     }
 }

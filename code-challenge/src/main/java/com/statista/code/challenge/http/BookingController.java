@@ -5,6 +5,7 @@ import com.statista.code.challenge.business.BookingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Currency;
 import java.util.List;
@@ -41,8 +42,12 @@ public class BookingController {
     }
 
     @GetMapping("/bookings/currencies")
-    public ResponseEntity<List<Currency>> getBookingByDepartment() {
+    public ResponseEntity<List<Currency>> getCurrencies() {
         return ResponseEntity.ok(bookingService.searchCurrencies());
     }
 
+    @GetMapping("/sum/{currency}")
+    public ResponseEntity<BigDecimal> getSumForCurrency(@PathVariable String currency) {
+        return ResponseEntity.ok(bookingService.sumForCurrency(currency));
+    }
 }

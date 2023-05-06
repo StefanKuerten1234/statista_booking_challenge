@@ -3,6 +3,7 @@ package com.statista.code.challenge.business;
 import com.statista.code.challenge.persistence.BookingRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,5 +51,12 @@ public class BookingService {
                 .map(Booking::currency)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public BigDecimal sumForCurrency(String currency) {
+        return bookingRepository.findAll().stream()
+                .filter(booking -> booking.currency().equals(Currency.getInstance(currency)))
+                .map(Booking::price)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
