@@ -120,4 +120,23 @@ class BookingServiceTest {
                 Booking.builder().booking_id("first A").department("a").build(),
                 Booking.builder().booking_id("second A").department("a").build());
     }
+
+    @Test
+    void shouldSearchCurrencies() {
+        BookingRepository bookingRepository = mock(BookingRepository.class);
+        BookingService bookingService = new BookingService(bookingRepository, ignored -> {
+        });
+        // Given saved Bookings with currency EUR and USD
+        when(bookingRepository.findAll()).thenReturn(List.of(
+                Booking.builder().booking_id("first EUR").currency(Currency.getInstance("EUR")).build(),
+                Booking.builder().booking_id("second EUR").currency(Currency.getInstance("EUR")).build(),
+                Booking.builder().booking_id("first USD").currency(Currency.getInstance("USD")).build()
+        ));
+
+        // When I search for all Currencies
+        List<Currency> actual = bookingService.searchCurrencies();
+
+        // Then the result contains exactly the 2 currencies
+        assertThat(actual).containsExactlyInAnyOrder(Currency.getInstance("EUR"), Currency.getInstance("USD"));
+    }
 }

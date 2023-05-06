@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Currency;
 import java.util.List;
 
 @RestController
@@ -37,6 +38,11 @@ public class BookingController {
     @GetMapping("/bookings/department/{department}")
     public ResponseEntity<List<Booking>> getBookingByDepartment(@PathVariable String department) {
         return ResponseEntity.ok(bookingService.searchByDepartment(department));
+    }
+
+    @GetMapping("/bookings/currencies")
+    public ResponseEntity<List<Currency>> getBookingByDepartment() {
+        return ResponseEntity.ok(bookingService.searchCurrencies());
     }
 
 }

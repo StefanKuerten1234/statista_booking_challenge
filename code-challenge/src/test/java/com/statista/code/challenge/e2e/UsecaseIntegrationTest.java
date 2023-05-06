@@ -78,5 +78,32 @@ public class UsecaseIntegrationTest {
                 .expectStatus().isOk()
                 .expectBody(String.class)
                 .value(json -> assertThat(json).isEqualToIgnoringWhitespace(listFromModifiedJson));
+
+        String initialJsonWithEUR = """
+                {
+                  "description": "Cool description!",
+                  "price": 50.00,
+                  "currency": "EUR",
+                  "subscription_start_date": 683124845000,
+                  "email": "valid@email.ok",
+                  "department": "cool department"
+                }
+                """;
+
+        webTestClient.post()
+                .uri("/bookingservice/bookings")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(initialJsonWithEUR)
+                .exchange();
+
+        webTestClient.get()
+                .uri("/bookingservice/bookings/currencies")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .value(json -> {
+                    assertThat(json).contains("EUR");
+                    assertThat(json).contains("INR");
+                });
     }
 }

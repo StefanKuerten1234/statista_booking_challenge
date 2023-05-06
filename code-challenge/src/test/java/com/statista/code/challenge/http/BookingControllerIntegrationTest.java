@@ -130,4 +130,21 @@ class BookingControllerIntegrationTest {
                 // And then the response contains a JSON representation of the booking
                 .andExpect(jsonPath("$[*].department").value("y"));
     }
+
+    @Test
+    void shouldGETCurrencies() throws Exception {
+        // Given a stored Booking with currency EUR
+        when(bookingService.searchCurrencies()).thenReturn(singletonList(
+                Currency.getInstance("EUR")));
+
+        // When I GET from /bookingservice/bookings/currencies
+        mockMvc.perform(
+                        get("/bookingservice/bookings/currencies"))
+
+                // Then the response is OK
+                .andExpect(status().isOk())
+
+                // Then the result is a list containing the currency EUR
+                .andExpect(jsonPath("$[0]").value("EUR"));
+    }
 }
