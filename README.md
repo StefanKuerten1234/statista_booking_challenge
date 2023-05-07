@@ -1,34 +1,75 @@
+**Intro**
+The Booking Service enables various business departments to maintain and process customer bookings. It offers a RESTful
+CRUD API via HTTP and also exposes some utility functions. It is build in an extensible manner, meaning adding new
+business departments is supported by a plugin architecture.
+
+**Limitations**
+
+- Only temporary persistence: Bookings are stored in memory only and will get lost on application restart. Especially
+  consider this point when deploying in a non-permanent hosting environment (i.e. AWS ECS Fargate or GCP CloudRun)
+- No Transport Layer encryption: By design, the application has no Transport Layer encryption. This shouldn't be much
+  of a problem when hosting in a public cloud, but don't forget to add a loadbalancer and application firewall to your
+  setup
+- No authentication: For the sake of making demonstration on this PoC easier, there is no authentication build in.
+  Unless you plan to rely on cloud provider IAM to authenticate access, it is strongly recommended to add this feature
+
 **Prerequisites**
 
-- JDK 17
-- IntelliJ (recommended) or your favorite Java IDE
-- Bash environment with installed 'curl' or Postman
+- JDK >= 17
+
+**How to test / build / run**
+
+- run all tests:
+
+```shell
+./mvnw test
+```
+
+- build an executable
+
+```shell
+./mvnw clean package spring-boot:repackage
+```
+
+- run locally
+
+```shell
+./mvnw spring-boot:run
+```
+
+**API Documentation**
+Once started, the application offers an OpenApi specification. For a locally run instance the URL is:
+
+http://localhost:8080/swagger-ui.html
+
+**Original specification below**
 
 **Preamble**
-     
+
 Your mission would you decide to accept it:
 
-As part of the multi-disciplinary development elite team **PIT** in Statista you are creating software to alleviate the 
-issues from our Sales team. For this, a new requirement has been raised to implement a RESTful web service that stores 
+As part of the multi-disciplinary development elite team **PIT** in Statista you are creating software to alleviate the
+issues from our Sales team. For this, a new requirement has been raised to implement a RESTful web service that stores
 _booking_ objects in memory and return information about them.
 
-Note: A _booking_ is a request from any of our beloved customers to acquire one of our products. 
+Note: A _booking_ is a request from any of our beloved customers to acquire one of our products.
 
 **Challenge**
 
 The module **code-challenge** already contains the basic structure of a Spring Boot application for you.
 
 The bookings to be stored have the following fields:
- - booking_id
- - description
- - price
- - currency
- - subscription_start_date
- - email
- - department
+
+- booking_id
+- description
+- price
+- currency
+- subscription_start_date
+- email
+- department
 
 Please define as many departments as you will like, and create a unique method `doBusiness()` for each department. This 
-is your time to shine, so the method implementations can be as simple, elegant, or complicated as you want. 
+is your time to shine, so the method implementations can be as simple, elegant, or complicated as you want.
 
 Feel free to select the best data type that, in your opinion, would define those fields the best.
 

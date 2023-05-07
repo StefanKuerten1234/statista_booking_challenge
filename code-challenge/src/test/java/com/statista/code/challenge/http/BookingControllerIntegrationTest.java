@@ -174,7 +174,7 @@ class BookingControllerIntegrationTest {
         mockMvc.perform(
                         get("/bookingservice/bookings/dobusiness/x"))
 
-                // Then the response is OK
+        // Then the response is OK
                 .andExpect(status().isOk())
 
                 // And the result is "Yeah!"
